@@ -6,12 +6,12 @@ begin
   Jeweler::Tasks.new do |gem|
     gem.name = "mongo_geo"
     gem.summary = %Q{A MongoMapper plugin that adds geospatial functionality.}
-    gem.description = %Q{TODO: longer description of your gem}
+    gem.description = %Q{A MongoMapper plugin that adds geospatial functionality.}
     gem.email = "mtparrish@gmail.com"
     gem.homepage = "http://github.com/parrish/mongo_geo"
     gem.authors = ["Michael Parrish"]
     gem.add_development_dependency "thoughtbot-shoulda", ">= 0"
-    # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
+    gem.add_dependency "mongo_mapper", ">= 0.8.2"
   end
   Jeweler::GemcutterTasks.new
 rescue LoadError
