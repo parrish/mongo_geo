@@ -1,6 +1,6 @@
 # mongo_geo
 
-mongo_geo is a plugin for MongoMapper that exposes the [GeoSpatial indexing features](http://www.mongodb.org/display/DOCS/Geospatial+Indexing) in MongoDb.
+mongo_geo is a plugin for [MongoMapper](http://github.com/jnunemaker/mongomapper) that exposes the [GeoSpatial indexing features](http://www.mongodb.org/display/DOCS/Geospatial+Indexing) in MongoDb.
 
 Currently, I'm only developing against Ruby 1.9.1 so other versions may be flakey.
 
@@ -15,7 +15,7 @@ Currently, I'm only developing against Ruby 1.9.1 so other versions may be flake
 
 ### [Plucky](http://github.com/jnunemaker/plucky) style queries:
 		TestAsset.where(:coords.near => [50, 50]).limit(10).to_a
-		TestAsset.where(:coords.within => { "$center" => [[50, 50], 10] }).to_a			# "$center" => [center, radius]
+		TestAsset.where(:coords.within => { "$center" => [[50, 50], 10] }).to_a				# "$center" => [center, radius]
 		TestAsset.where(:coords.within => { "$box" => [ [45, 45], [55, 55] ] }).to_a		# [lower_left, top_right]
 
 N.B. bounds queries are syntactically ugly at the moment and are likely to change soon
