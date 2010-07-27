@@ -75,6 +75,15 @@ module GeoSpatial
       dy = loc[1] - pt[1]
       Math.sqrt((dx ** 2) + (dy ** 2))
     end
+    
+    def neighbors(opts = {})
+      opts = {:skip => 0, :limit => 10}.merge(opts)
+      location = self.class.geo_key_name.to_sym
+      
+      self.class.name.constantize.where(
+        location.near => self.send(self.class.geo_key_name)
+      ).skip(opts[:skip]).limit(opts[:limit] + 1).to_a.reject { |n| n.id == self.id }
+    end
   end
 end
 

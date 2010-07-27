@@ -49,5 +49,15 @@ class TestMongoGeo < Test::Unit::TestCase
       TestAsset.collection.drop_indexes
       TestAsset.collection.remove
     end
+    
+    should "find close objects with #neighbors" do
+      neighbors = @asset1.neighbors
+      assert_equal([@asset2, @asset3], neighbors)
+    end
+    
+    should "find closest object with #neighbors" do
+      neighbors = @asset1.neighbors(:limit => 1)
+      assert_equal([@asset2], neighbors)
+    end
   end
 end
