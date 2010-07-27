@@ -2,7 +2,7 @@
 
 mongo_geo is a plugin for [MongoMapper](http://github.com/jnunemaker/mongomapper) that exposes the [GeoSpatial indexing features](http://www.mongodb.org/display/DOCS/Geospatial+Indexing) in MongoDb.
 
-Currently, I'm only developing against Ruby 1.9.1 so other versions may be flakey.
+I've started testing against ruby 1.8.7 and 1.9.1.  So far, so good.
 
 ## Usage
 ### On the model
@@ -25,6 +25,7 @@ N.B. bounds queries are syntactically ugly at the moment and are likely to chang
 		nearby.average_distance						# average distance of all results from the target point
 		nearby.first.distance						# distance of this result from the target
 		TestAsset.first.distance_from([50, 50])		# distance from any point
+		TestAsset.first.neighborhood(:limit => 10)  # closest objects to this one
 Queries can be specified with the [ruby driver style finders](http://github.com/mongodb/mongo-ruby-driver/blob/master/examples/queries.rb)
 
 ## Note on Patches/Pull Requests
