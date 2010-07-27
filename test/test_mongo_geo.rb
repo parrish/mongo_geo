@@ -34,15 +34,15 @@ class TestMongoGeo < Test::Unit::TestCase
       assert_equal(2, nearby.count)
       assert_equal(@asset1, nearby.first)
       
-      assert(nearby.methods.include?(:average_distance), "#near did not define average_distance")
+      assert(nearby.methods.collect{ |m| m.to_sym }.include?(:average_distance), "#near did not define average_distance")
       assert_equal(nearby.average_distance.class, Float)
       
-      assert(nearby.first.methods.include?(:distance), "#near did not define distance on each record")
+      assert(nearby.first.methods.collect{ |m| m.to_sym }.include?(:distance), "#near did not define distance on each record")
       assert_equal(nearby.first.distance.class, Float)
     end
     
     should "perform a simple #distance_from calculation" do
-      assert(@asset1.methods.include?(:distance_from), "GeoSpatial::InstanceMethods were not included")
+      assert(@asset1.methods.collect{ |m| m.to_sym }.include?(:distance_from), "GeoSpatial::InstanceMethods were not included")
       assert_equal(Math.sqrt(2), @asset1.distance_from([51, 51]))
       assert_raise(ArgumentError) { @asset1.distance_from(51) }
       

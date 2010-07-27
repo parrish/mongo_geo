@@ -20,6 +20,6 @@ end
 
 class Test::Unit::TestCase
   def setup
-    DB['assets'].remove
+    DB['test_assets'].remove
   end
 end
