@@ -20,17 +20,21 @@ module GeoSpatial
   module ClassMethods
     def geo_key(name, klass, *args)
       unless [Array, Hash].include?(klass)
-        raise ArgumentError, "#{klass} is not a valid type for a geo_key\nUse a Hash"
+        raise ArgumentError, "#{ klass } is not a valid type for a geo_key\nUse an Array or a Hash"
+      end
+      
+      will_create_index = if args.last.is_a?(Hash) && args.last.has_key?(:create_index)
+        !!args.last.delete(:create_index)
       end
       
       if @geo_key_name.nil?
         key name.to_sym, klass, *args
-        ensure_index([[name, Mongo::GEO2D]])
+        ensure_index([[name, Mongo::GEO2D]]) if will_create_index
         @geo_key_name = name
       else
         error = "MongoDB is currently limited to only one geospatial index per collection.\n"
-        error += "geo_key #{name} was NOT added to #{self.name}"
-        raise(RuntimeError, error)
+        error += "geo_key #{ name } was NOT added to #{ self.name }"
+        raise RuntimeError, error
       end
     end
     

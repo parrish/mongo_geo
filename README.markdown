@@ -8,8 +8,11 @@ mongo_geo is a plugin for [MongoMapper](http://github.com/jnunemaker/mongomapper
 class TestAsset
   include MongoMapper::Document
   plugin GeoSpatial
-
-  geo_key :coords, Array
+  
+  # Pass create_index: true to ensure the Geo2D index is created
+  # On an embedded document, you can create the index with
+  # ensure_index 'embedded_doc.coords' => Mongo::GEO2D
+  geo_key :coords, Array, create_index: true
 end
 ```
 

@@ -22,6 +22,10 @@ describe TestModel do
     TestModel.collection.index_information['coords_2d'].should be_present
   end
   
+  it 'should not create an index unless specified' do
+    TestIndexlessModel.collection.index_information.should be_empty
+  end
+  
   it 'should validate the geo_key type' do
     expect{ TestModel.geo_key :foo, Float }.to raise_error{ ArgumentError }
     expect{ TestModel.geo_key :bar, Array }.to raise_exception{ RuntimeError }
