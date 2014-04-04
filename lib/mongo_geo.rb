@@ -18,13 +18,13 @@ module GeoSpatial
   extend ActiveSupport::Concern
   
   module ClassMethods
-    def geo_key(name, klass)
+    def geo_key(name, klass, *args)
       unless [Array, Hash].include?(klass)
         raise ArgumentError, "#{klass} is not a valid type for a geo_key\nUse a Hash"
       end
       
       if @geo_key_name.nil?
-        key name.to_sym, klass
+        key name.to_sym, klass, *args
         ensure_index([[name, Mongo::GEO2D]])
         @geo_key_name = name
       else
