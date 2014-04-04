@@ -6,7 +6,7 @@ module Plucky
       def near
         SymbolOperator.new(self, 'near')
       end
-
+      
       def within
         SymbolOperator.new(self, 'within')
       end
@@ -20,7 +20,7 @@ module GeoSpatial
   module ClassMethods
     def geo_key(name, klass)
       unless [Array, Hash].include?(klass)
-        raise(ArgumentError, "#{klass} is not a valid type for a geo_key\nUse either an Array(recommended) or a Hash")
+        raise ArgumentError, "#{klass} is not a valid type for a geo_key\nUse a Hash"
       end
       
       if @geo_key_name.nil?
@@ -45,24 +45,24 @@ module GeoSpatial
       params.each_pair{ |key, value| args[key.to_sym] = value }
       
       raw = database.command(args)
-      objects = raw["results"].collect{ |r| self.load(r["obj"]) }
+      objects = raw['results'].collect{ |r| self.load(r['obj']) }
       objects.instance_variable_set(:@raw, raw)
       
       objects.each.with_index do |obj, index|
-        obj.instance_variable_set(:@distance, raw["results"][index]["dis"])
+        obj.instance_variable_set(:@distance, raw['results'][index]['dis'])
         def obj.distance
           @distance
         end
       end
       
       def objects.average_distance
-        @raw["stats"]["avgDistance"]
+        @raw['stats']['avgDistance']
       end
       
       objects
     end
   end
-
+  
   def distance_from(pt)
     name = self.class.geo_key_name
     return nil if name.nil?
