@@ -15,6 +15,8 @@ module Plucky
 end
 
 module GeoSpatial
+  extend ActiveSupport::Concern
+  
   module ClassMethods
     def geo_key(name, klass)
       unless [Array, Hash].include?(klass)
@@ -61,29 +63,27 @@ module GeoSpatial
     end
   end
 
-  module InstanceMethods
-    def distance_from(pt)
-      name = self.class.geo_key_name
-      return nil if name.nil?
-      raise(ArgumentError) unless [Array, Hash].include?(pt.class)
-      
-      loc = self.send(name)
-      loc = loc.values if loc.is_a?(Hash)
-      pt = pt.values if pt.is_a?(Hash)
-      
-      dx = loc[0] - pt[0]
-      dy = loc[1] - pt[1]
-      Math.sqrt((dx ** 2) + (dy ** 2))
-    end
+  def distance_from(pt)
+    name = self.class.geo_key_name
+    return nil if name.nil?
+    raise(ArgumentError) unless [Array, Hash].include?(pt.class)
     
-    def neighbors(opts = {})
-      opts = {:skip => 0, :limit => 10}.merge(opts)
-      location = self.class.geo_key_name.to_sym
-      
-      self.class.name.constantize.where(
-        location.near => self.send(self.class.geo_key_name)
-      ).skip(opts[:skip]).limit(opts[:limit] + 1).to_a.reject { |n| n.id == self.id }
-    end
+    loc = self.send(name)
+    loc = loc.values if loc.is_a?(Hash)
+    pt = pt.values if pt.is_a?(Hash)
+    
+    dx = loc[0] - pt[0]
+    dy = loc[1] - pt[1]
+    Math.sqrt((dx ** 2) + (dy ** 2))
+  end
+  
+  def neighbors(opts = {})
+    opts = {:skip => 0, :limit => 10}.merge(opts)
+    location = self.class.geo_key_name.to_sym
+    
+    self.class.name.constantize.where(
+      location.near => self.send(self.class.geo_key_name)
+    ).skip(opts[:skip]).limit(opts[:limit] + 1).to_a.reject { |n| n.id == self.id }
   end
 end
 
